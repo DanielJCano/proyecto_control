@@ -1,0 +1,7 @@
+{
+    "port": "/dev/tty.usbserial-110",
+    "configuration": "cpu=atmega328",
+    "board": "arduino:avr:nano",
+    "programmer": "usbtinyisp",
+    "sketch": "proyecto_control.ino"
+}
