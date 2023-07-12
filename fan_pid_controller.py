@@ -54,7 +54,7 @@ while True:
     fan_speed = compute_pid(temperature)
     
     # Send fan speed command to Arduino
-    arduino.write(f"{fan_speed}\n".encode())  # Send fan speed command to Arduino
+    arduino.write(f"{fan_speed}".encode())  # Send fan speed command to Arduino
     
     # Delay for a period of time
     time.sleep(1)  # Adjust the delay time as per your requirement
