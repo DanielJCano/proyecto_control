@@ -8,11 +8,16 @@ setpoint = 30.0  # Set the desired setpoint temperature
 Kp = 1.0  # Proportional gain
 Ki = 0.5  # Integral gain
 Kd = 0.2  # Derivative gain
-integral = 0.0  # Integral term
+
 # Serial communication with Arduino
 arduino = serial.Serial('/dev/ttyUSB0', 9600)  # Replace with the correct serial port and baud rate
 
+integral = 0.0  # Initialize the integral term
+prev_error = 0.0  # Initialize the previous error term
+
 def compute_pid(temperature):
+    global integral, prev_error  # Declare the variables as global
+    
     # Compute PID control
     error = setpoint - temperature
     
