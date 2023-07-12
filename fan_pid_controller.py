@@ -32,7 +32,7 @@ def compute_pid(temperature):
     
     # Calculate the PID output
     output = proportional + integral + derivative
-    
+    print(f'output: {output}')
     # Update the previous error for the next iteration
     prev_error = error
     
@@ -49,8 +49,7 @@ while True:
         print(f"temperatura: {temperature}")
     except ValueError:
         temperature = 0.0
-
-    print(f'Temperature: {temperature} degrees C')    
+        print('Error reading data from Arduino')
     # Compute fan speed control
     fan_speed = compute_pid(temperature)
     
