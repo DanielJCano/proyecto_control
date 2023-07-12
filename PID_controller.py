@@ -7,23 +7,36 @@ arduino = serial.Serial('/dev/cu.usbserial-10', 9600, timeout=.1)
 time.sleep(1)  # give the connection a second to settle
 
 # PID configuration
-setpoint = 25.0
-Kp = 2.0
-Ki = 5.0
-Kd = 1.0
-pid = PID(Kp, Ki, Kd, setpoint)
+Kp = 1.0  # Proportional gain
+Ki = 0.5  # Integral gain
+Kd = 0.2  # Derivative gain
+setpoint = 35.0  # Target setpoint
+
+integral = 0.0  # Integral term
+prev_error = 0.0  # Previous error term
+
 
 while True:
-    # Read temperature data from Arduino
-    line = ser.readline().decode().strip()
-    if line.startswith("T:"):
-        temperature = float(line[2:])
+    arduino_serial = arduino.readline()
+    arduino_serial = temp.decode('utf-8')
+    print(arduino_serial)
+    temperature = int(temp[11:15])
+    print(f'temperatura: {temperature}\n')
 
-        # Compute fan speed using PID control
-        fan_speed = pid(temperature)
+    # ================> PID <================
+    error = setpoint - temperature  # Calculate the error term
 
-        # Send fan speed command to Arduino
-        ser.write(f"{int(fan_speed)}\n".encode())
+    # Proportional term
+    proportional = Kp * error
 
-        # Print temperature and fan speed
-        print(f"Temperature: {temperature} °C\tFan Speed: {fan_speed}")
+    # Integral term
+    integral += Ki * error
+
+    # Derivative term
+    derivative = Kd * (error - prev_error)
+
+    # Calculate the PID output
+    output = proportional + integral + derivative
+
+    # Update the previous error for the next iteration
+    prev_error = error
