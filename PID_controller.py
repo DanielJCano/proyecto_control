@@ -30,7 +30,7 @@ while True:
     print(f'Temperature: {temperature} degrees C')
     # Send fan speed command to Arduino
     # fan_speed = int(input("Enter fan speed (0-255): "))  # Get fan speed from user
-    print(fan_speed)
+
     arduino.write(f"{fan_speed}".encode())  # Send fan speed command to Arduino
     # Implement PID control here (omitted for simplicity)
     # ================> PID <================
@@ -46,8 +46,9 @@ while True:
     derivative = Kd * (error - prev_error)
 
     # Calculate the PID output
-    fan_speed = proportional + integral + derivative
-
+    error = proportional + integral + derivative
+    fan_speed = error
+    print(f'fan_speed: {fan_speed}')
     if fan_speed > 255:
         fan_speed = 255
     elif fan_speed < 0:
@@ -55,5 +56,5 @@ while True:
     else:
         pass
     # Update the previous error for the next iteration
-    prev_error = fan_speed
+    prev_error = error
     time.sleep(5)
