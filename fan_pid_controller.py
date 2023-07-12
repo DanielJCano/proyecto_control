@@ -8,7 +8,7 @@ setpoint = 30.0  # Set the desired setpoint temperature
 Kp = 1.0  # Proportional gain
 Ki = 0.5  # Integral gain
 Kd = 0.2  # Derivative gain
-
+integral = 0.0  # Integral term
 # Serial communication with Arduino
 arduino = serial.Serial('/dev/ttyUSB0', 9600)  # Replace with the correct serial port and baud rate
 
