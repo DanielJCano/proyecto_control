@@ -19,7 +19,9 @@ while True:
     print(arduino_serial)
     try:
         temperature = float(arduino_serial[12:15])
-        voltage = float(arduino_serial[0:3])
+        print(temperature)
+        voltage = float(arduino_serial[0:3])\
+        print(voltage)
     except ValueError:
         voltage = 0.0
         temperature = 0.0
