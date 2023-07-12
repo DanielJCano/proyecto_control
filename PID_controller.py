@@ -5,13 +5,13 @@ arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 
 # PID configuration
 Kp = 1.0  # Proportional gain
-Ki = 0.5  # Integral gain
-Kd = 0.2  # Derivative gain
+Ki = 2.5  # Integral gain
+Kd = 5.2  # Derivative gain
 setpoint = 35.0  # Target setpoint
 
 integral = 0.0  # Integral term
 prev_error = 0.0  # Previous error term
-fan_speed = 120  # Fan speed (0-255)
+fan_speed = 0  # Fan speed (0-255)
 
 while True:
     # Read temperature data from Arduino
@@ -48,6 +48,12 @@ while True:
     # Calculate the PID output
     fan_speed = proportional + integral + derivative
 
+    if fan_speed > 255:
+        fan_speed = 255
+    elif fan_speed < 0:
+        fan_speed = 0
+    else:
+        pass
     # Update the previous error for the next iteration
-    prev_error = error
+    prev_error = fan_speed
     time.sleep(5)
