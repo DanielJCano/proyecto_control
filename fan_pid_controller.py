@@ -36,7 +36,16 @@ def compute_pid(temperature):
 while True:
     # Read temperature from LM35 sensor
     # Implement your code to read the temperature from the LM35 sensor on the Raspberry Pi
-    
+    # Read temperature data from Arduino
+    arduino_serial = arduino.readline().decode('utf-8').strip()
+    print(arduino_serial)
+    try:
+        temperature = float(arduino_serial[12:15])
+        print(f"temperatura: {temperature}")
+    except ValueError:
+        temperature = 0.0
+
+    print(f'Temperature: {temperature} degrees C')    
     # Compute fan speed control
     fan_speed = compute_pid(temperature)
     
