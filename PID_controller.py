@@ -18,8 +18,8 @@ while True:
     arduino_serial = arduino.readline().decode('utf-8').strip()
     print(arduino_serial)
     try:
-        temperature = float(arduino_serial.split("|")[1].split("degrees C")[0].strip())
-        voltage = float(arduino_serial.split("|")[0].split("volts")[1].strip())
+        temperature = float(arduino_serial[12:15])
+        voltage = float(arduino_serial[0:3])
     except ValueError:
         voltage = 0.0
         temperature = 0.0
