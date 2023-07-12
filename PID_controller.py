@@ -19,8 +19,10 @@ while True:
     print(arduino_serial)
     try:
         temperature = float(arduino_serial.split("|")[1].split("degrees C")[0].strip())
+        voltage = float(arduino_serial.split("|")[0].split("volts")[1].strip())
     except:
         temperature = 0.0
+        temperature = -((voltage - 0.5) * 100)
     print(f'Temperature: {temperature} degrees C')
     # Send fan speed command to Arduino
     # fan_speed = int(input("Enter fan speed (0-255): "))  # Get fan speed from user
