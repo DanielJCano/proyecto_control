@@ -37,8 +37,9 @@ void loop()
     }
   }
 
-  float voltage = (reading_sensor * 5.0) / 1023.0;
-  float temperatureC = -((voltage - 0.5) * 100);
+  float voltage = (reading_sensor) * 5.0 / 1023.0;
+  delay(500);
+  float temperatureC = voltage * 100;
 
   Serial.print(voltage);
   Serial.print(" volts | ");
@@ -49,5 +50,5 @@ void loop()
   Serial.print(analogRead(fanPin));
   Serial.print(" speed \n");
 
-  delay(5000);
+  delay(4500);
 }
