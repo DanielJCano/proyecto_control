@@ -25,6 +25,7 @@ while True:
     except ValueError:
         voltage = 0.0
         temperature = 0.0
+        print('Error reading data from Arduino')
     temperature = -((voltage - 0.5) * 100)
     print(f'Temperature: {temperature} degrees C')
     # Send fan speed command to Arduino
