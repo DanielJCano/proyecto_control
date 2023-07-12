@@ -20,7 +20,7 @@ void loop() {
   float voltage = (reading_sensor * 5.0) / 1023.0;
   float temperatureC = -((voltage - 0.5)* 100) ;
   Serial.print(voltage); Serial.print(" volts ");
-  Serial.print(temperatureC); Serial.print(" degrees C");
+  Serial.print(temperatureC); Serial.print(" degrees C ");
   Serial.print(tachPin); Serial.print(" rpm");
   
   delay(5000);
