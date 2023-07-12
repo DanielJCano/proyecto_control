@@ -21,6 +21,7 @@ while True:
         temperature = float(arduino_serial.split("|")[1].split("degrees C")[0].strip())
         voltage = float(arduino_serial.split("|")[0].split("volts")[1].strip())
     except:
+        voltage = 0.0
         temperature = 0.0
         temperature = -((voltage - 0.5) * 100)
     print(f'Temperature: {temperature} degrees C')
