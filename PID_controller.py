@@ -5,8 +5,8 @@ arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 
 # PID configuration
 Kp = 1.0  # Proportional gain
-Ki = 2.5  # Integral gain
-Kd = 5.2  # Derivative gain
+Ki = 0.25  # Integral gain
+Kd = 0.52  # Derivative gain
 setpoint = 35.0  # Target setpoint
 
 integral = 0.0  # Integral term
