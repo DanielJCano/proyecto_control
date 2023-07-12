@@ -1,59 +1,47 @@
-#!/usr/bin/env python3
-# https://howchoo.com/g/ote2mjkzzta/control-raspberry-pi-fan-temperature-python#:~:text=Automatically%20Control%20Your%20Raspberry%20Pi%20Fan%20%28and%20Temperature%29,...%208%20Testing%20our%20work%20...%20More%20items
-
-import subprocess
-import time
 import serial
-# from gpiozero import OutputDevice
+import time
 
-arduino = serial.Serial('/dev/cu.usbserial-10', 9600, timeout=.1)
-time.sleep(1) #give the connection a second to settle
+# Setpoint temperature
+setpoint = 30.0  # Set the desired setpoint temperature
 
+# PID Parameters
+Kp = 1.0  # Proportional gain
+Ki = 0.5  # Integral gain
+Kd = 0.2  # Derivative gain
 
-ON_THRESHOLD = 65  # (degrees Celsius) Fan kicks on at this temperature.
-OFF_THRESHOLD = 55  # (degress Celsius) Fan shuts off at this temperature.
-SLEEP_INTERVAL = 5  # (seconds) How often we check the core temperature.
-GPIO_PIN = 17  # Which GPIO pin you're using to control the fan.
+# Serial communication with Arduino
+arduino = serial.Serial('/dev/ttyUSB0', 9600)  # Replace with the correct serial port and baud rate
 
+def compute_pid(temperature):
+    # Compute PID control
+    error = setpoint - temperature
+    
+    # Proportional term
+    proportional = Kp * error
+    
+    # Integral term
+    integral += Ki * error
+    
+    # Derivative term
+    derivative = Kd * (error - prev_error)
+    
+    # Calculate the PID output
+    output = proportional + integral + derivative
+    
+    # Update the previous error for the next iteration
+    prev_error = error
+    
+    return output
 
-def get_temp():
-    """Get the core temperature.
-    Run a shell script to get the core temp and parse the output.
-    Raises:
-        RuntimeError: if response cannot be parsed.
-    Returns:
-        float: The core temperature in degrees Celsius.
-    """
-    # output = subprocess.run(['vcgencmd', 'measure_temp'], capture_output=True)
-    # temp_str = output.stdout.decode()
-    # try:
-    #     return float(temp_str.split('=')[1].split('\'')[0])
-    # except (IndexError, ValueError):
-    #     raise RuntimeError('Could not parse temperature output.')
-
-
-if __name__ == '__main__':
-    # Validate the on and off thresholds
-    # if OFF_THRESHOLD >= ON_THRESHOLD:
-    #     raise RuntimeError('OFF_THRESHOLD must be less than ON_THRESHOLD')
-
-    # fan = OutputDevice(GPIO_PIN)
-
-    while True:
-        temp = arduino.readline()
-        temp = temp.decode('utf-8')
-        print(temp)
-        temperatura = int(temp[11:15])
-        print(f'temperatura: {temperatura}\n')
-        # Start the fan if the temperature has reached the limit and the fan
-        # isn't already running.
-        # NOTE: `fan.value` returns 1 for "on" and 0 for "off"
-        # if temp > ON_THRESHOLD and not fan.value:
-        #     fan.on()
-
-        # # Stop the fan if the fan is running and the temperature has dropped
-        # # to 10 degrees below the limit.
-        # elif fan.value and temp < OFF_THRESHOLD:
-        #     fan.off()
-
-        time.sleep(SLEEP_INTERVAL)
+while True:
+    # Read temperature from LM35 sensor
+    # Implement your code to read the temperature from the LM35 sensor on the Raspberry Pi
+    
+    # Compute fan speed control
+    fan_speed = compute_pid(temperature)
+    
+    # Send fan speed command to Arduino
+    arduino.write(f"{fan_speed}\n".encode())  # Send fan speed command to Arduino
+    
+    # Delay for a period of time
+    time.sleep(1)  # Adjust the delay time as per your requirement
