@@ -1,7 +1,7 @@
 import serial
 import time
 
-arduino = serial.Serial('COM4', 9600, timeout=1)
+arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 
 # PID configuration
 Kp = 1.0  # Proportional gain
@@ -13,7 +13,7 @@ integral = 0.0  # Integral term
 prev_error = 0.0  # Previous error term
 
 while True:
-
+    fan_speed = 120  # Fan speed (0-255)
     # Read temperature data from Arduino
     arduino_serial = arduino.readline().decode('utf-8').strip()
     print(arduino_serial)
@@ -23,8 +23,8 @@ while True:
         temperature = 0.0
     print(f'Temperature: {temperature} degrees C')
     # Send fan speed command to Arduino
-    fan_speed = int(input("Enter fan speed (0-255): "))  # Get fan speed from user
-    arduino.write(f"{fan_speed}\n".encode())  # Send fan speed command to Arduino
+    # fan_speed = int(input("Enter fan speed (0-255): "))  # Get fan speed from user
+    arduino.write(f"{fan_speed}".encode())  # Send fan speed command to Arduino
     # Implement PID control here (omitted for simplicity)
     # ================> PID <================
     error = setpoint - temperature  # Calculate the error term
@@ -39,7 +39,7 @@ while True:
     derivative = Kd * (error - prev_error)
 
     # Calculate the PID output
-    output = proportional + integral + derivative
+    fan_speed = proportional + integral + derivative
 
     # Update the previous error for the next iteration
     prev_error = error
