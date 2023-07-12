@@ -11,9 +11,9 @@ setpoint = 35.0  # Target setpoint
 
 integral = 0.0  # Integral term
 prev_error = 0.0  # Previous error term
+fan_speed = 120  # Fan speed (0-255)
 
 while True:
-    fan_speed = 120  # Fan speed (0-255)
     # Read temperature data from Arduino
     arduino_serial = arduino.readline().decode('utf-8').strip()
     print(arduino_serial)
@@ -30,6 +30,7 @@ while True:
     print(f'Temperature: {temperature} degrees C')
     # Send fan speed command to Arduino
     # fan_speed = int(input("Enter fan speed (0-255): "))  # Get fan speed from user
+    print(fan_speed)
     arduino.write(f"{fan_speed}".encode())  # Send fan speed command to Arduino
     # Implement PID control here (omitted for simplicity)
     # ================> PID <================
