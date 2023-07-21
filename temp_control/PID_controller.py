@@ -1,7 +1,15 @@
+
 import serial
 import time
-
-arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+import os
+import django
+os.environ['DJANGO_SETTINGS_MODULE'] = 'temp_control.settings'
+django.setup()
+from controler.models import Arduino_data
+# Raspberrypi serial port configuration
+# arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+# Mac serial port configuration
+arduino = serial.Serial('/dev/tty.usbserial-110', 9600, timeout=1)
 
 # PID configuration
 Kp = 1.0  # Proportional gain
@@ -12,13 +20,13 @@ setpoint = 35.0  # Target setpoint
 integral = 0.0  # Integral term
 prev_error = 0.0  # Previous error term
 fan_speed = 0  # Fan speed (0-255)
-
+Arduino_data.objects.all().delete()
 while True:
     # Read temperature data from Arduino
     arduino_serial = arduino.readline().decode('utf-8').strip()
     print(arduino_serial)
     try:
-        temperature = float(arduino_serial[12:15])
+        temperature = float(arduino_serial[27:32])
         print(temperature)
         # voltage = float(arduino_serial[0:3])
         # print(voltage)
@@ -48,7 +56,8 @@ while True:
     # Calculate the PID output
     error = proportional + integral + derivative
     fan_speed = error
-    print(f'fan_speed: {fan_speed}')
+
+    print(f'fan_speed: {fan_speed}\n')
     if fan_speed > 255:
         fan_speed = 255
     elif fan_speed < 0:
@@ -57,4 +66,6 @@ while True:
         pass
     # Update the previous error for the next iteration
     prev_error = error
+    Arduino_data.objects.create(temperature=int(temperature), fanspeed=int(fan_speed), pid=int(error))
+
     time.sleep(5)

@@ -34,7 +34,7 @@ def compute_pid(temperature):
     output = -(proportional + integral + derivative)
     print(f'output: {output}')
     # Update the previous error for the next iteration
-    prev_error = error
+    prev_error = errorp
     
     return output
 

@@ -1,0 +1,32 @@
+{% extends 'template.html' %}
+{% block body %}
+    <meta http-equiv="refresh" content="5">
+
+    <div class="container justify-content-center">
+        <div class='row'>
+            <div class='col-md-'>
+                <h1>Grafica TEMP</h1>
+                <div>
+                {% if chart %}
+                    <img src="data:image/png;base64, {{chart|safe}}"></img>
+                {% endif %}
+                </div>
+            </div>
+            <div class="col-md-">
+                <h1>Settings</h1>
+            </div>
+        </div>
+
+        {% comment %} <div class='row'>
+            <div class='col-md-'>
+                <h1>Grafica PID</h1>
+                <div>
+                {% if chart_pid %}
+                    <img src="data:image/png;base64, {{chart_pid|safe}}">
+                {% endif %}
+                </div>
+            </div>
+        </div> {% endcomment %}
+    </div>
+
+{% endblock %}

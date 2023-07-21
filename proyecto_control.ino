@@ -1,23 +1,23 @@
 // Sensor de temperatura
-#define sensorPin A7
+#define sensorPin A0
 // Control de ventilador
 const int fanPin = 3; // PWM pin for fan control
+const int reading_speed = 4;
 // Tachometro para medir la velocidad
-const int tachPin = 4;
 
 void setup()
 {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  pinMode(tachPin, INPUT_PULLUP);
   pinMode(fanPin, OUTPUT);
+  pinMode(reading_speed, INPUT);
 }
-
 void loop()
 {
   // put your main code here, to run repeatedly:
   int reading_sensor = analogRead(sensorPin);
-  int reading_speed = digitalRead(tachPin);
+  float voltage = (reading_sensor)* 4.8 / 1024;
+  float temperatureC = (voltage * 100);
 
   // Receive fan speed command from Python
   if (Serial.available() > 0)
@@ -36,11 +36,9 @@ void loop()
       }
     }
   }
-
-  float voltage = (reading_sensor) * 5.0 / 1023.0;
-  delay(500);
-  float temperatureC = voltage * 100;
-
+  Serial.print("Sensor: ");
+  Serial.print(reading_sensor);
+  Serial.print(" | ");
   Serial.print(voltage);
   Serial.print(" volts | ");
   Serial.print(temperatureC);
@@ -50,5 +48,5 @@ void loop()
   Serial.print(analogRead(fanPin));
   Serial.print(" speed \n");
 
-  delay(4500);
+  delay(5000);
 }
